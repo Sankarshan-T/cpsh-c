@@ -17,8 +17,15 @@ int main(void) {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
 
-    printBanner();
-    printf("Hello world!!\n");
+    int number = 42;
+    float decimal = 4.5;
+    char letter = 'C';
+    char name[] = "CPSH";
+
+    printf("Number: %d\n", number);
+    printf("Decimal: %f\n", decimal);
+    printf("Character: %c\n", letter);
+    printf("String: %s\n", name);
 
     return 0;
 }
