@@ -17,15 +17,15 @@ int main(void) {
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
 
-    int number = 42;
-    float decimal = 4.5;
-    char letter = 'C';
     char name[] = "CPSH";
+    char learning[] = "C programming";
+    int version = 1;
+    char language = 'C';
 
-    printf("Number: %d\n", number);
-    printf("Decimal: %f\n", decimal);
-    printf("Character: %c\n", letter);
     printf("String: %s\n", name);
-
+    printf("Version: %d\n", version);
+    printf("language: %c\n", language);
+    printf("Learning: %s\n", learning);
+    
     return 0;
 }
