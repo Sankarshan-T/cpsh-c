@@ -19,18 +19,26 @@ int main(void)
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
 
-    char name[50];
-    int age;
+    char answer;
 
-    printf("What is your name?");
-
-    fgets(name, sizeof(name), stdin);
-
-    name[strcspn(name, "\n")] = '\0';
-    printf("Your name is %s\n", name);
-
-    printf("What is your age?");
-    scanf("%d", &age);
-
-    printf("You are %d years old.\n", age);
+    while (1)
+    {
+        printf("Welcome to cpsh! Do you want to continue? :D (y/n)");
+        scanf(" %c", &answer);
+        if (answer == 'y')
+        {
+            printf("Oki! Continuing\n");
+            continue;
+        }
+        else if (answer == 'n')
+        {
+            printf("Quitting.. :(\n");
+            break;
+        }
+        else
+        {
+            printf("Enter y or n!\n");
+            continue;
+        }
+    }
 }
