@@ -1,8 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_C
 
-void printBanner();
 void welcome();
+void printBanner(void);
 int runCommand(char input[]);
 
 #endif
