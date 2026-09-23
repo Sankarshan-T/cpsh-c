@@ -3,6 +3,6 @@
 
 void welcome();
 void printBanner(void);
-int runCommand(char input[]);
+int runCommand(char command[], char arguments[]);
 
 #endif

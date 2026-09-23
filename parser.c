@@ -7,6 +7,8 @@ ParsedCommand parseCommand(char input[])
 {
     ParsedCommand result;
 
+    input[strcspn(input, "\n")] = '\0';
+
     result.command[0] = '\0';
     result.arguments[0] = '\0';
 

@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "commands.h"
+#include "parser.h"
 
 int main(void)
 {
@@ -19,7 +20,9 @@ int main(void)
 
         fgets(input, sizeof(input), stdin);
 
-        if (runCommand(input) == 1)
+        ParsedCommand parsed = parseCommand(input);
+
+        if (runCommand(parsed.command, parsed.arguments) == 1)
         {
             break;
         }
