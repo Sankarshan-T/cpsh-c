@@ -14,7 +14,7 @@ int main(void)
     char history[100][100];
     int historyCount = 0;
 
-    printBanner();
+    home();
 
     while (1)
     {

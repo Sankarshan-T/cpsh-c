@@ -24,12 +24,13 @@ void printHelp()
     message(GREEN, "Available commands :D\n");
     message(GRAY, "  home - Return to home screen\n");
     message(WHITE, "  help - Show all available commands\n");
-    message(WHITE, "  touch - Create a file\n");
-    message(CYAN, "  cat - Display a file\n");
+    message(WHITE, "  touch <filename> - Create a file\n");
+    message(CYAN, "  cat <filename> - Display a file\n");
     message(CYAN, "  pwd - Show current directory\n");
     message(CYAN, "  cd - Change the current directory\n");
     message(CYAN, "  ls - List files and folders\n");
     message(CYAN, "  history - Show previous commands\n");
+    message(RED, "  remove <filename> - Remove a file\n");
     message(RED, "  clear - Clear the terminal\n");
     message(RED, "  quit - Exit CPSH-C\n ");
 }
@@ -130,10 +131,24 @@ void readFile(char filename[])
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
+        setColor(GREEN);
         printf("%s\n", line);
+        setColor(WHITE);
     }
 
     fclose(file);
+}
+
+void removeFile(char filename[])
+{
+    if (remove(filename) == 0)
+    {
+        message(GREEN, "File removed!\n");
+    }
+    else
+    {
+        message(RED, "Couldn't remove file!\n");
+    }
 }
 
 int runCommand(
@@ -242,6 +257,18 @@ int runCommand(
 
         snprintf(argsNew, sizeof(argsNew), "%s\n", arguments);
         message(GREEN, argsNew);
+        return 0;
+    }
+
+    else if (strcmp(command, "remove") == 0)
+    {
+        if (arguments[0] == '\0')
+        {
+            message(YELLOW, "Usage: remove <filename>\n");
+            return 0;
+        }
+
+        removeFile(arguments);
         return 0;
     }
 
