@@ -11,6 +11,8 @@ int main(void)
     SetConsoleCP(65001);
 
     char input[1000];
+    char history[100][100];
+    int historyCount = 0;
 
     printBanner();
 
@@ -21,9 +23,15 @@ int main(void)
 
         fgets(input, sizeof(input), stdin);
 
+        if (historyCount < 100)
+        {
+            strcpy(history[historyCount], input);
+            historyCount++;
+        }
+
         ParsedCommand parsed = parseCommand(input);
 
-        if (runCommand(parsed.command, parsed.arguments) == 1)
+        if (runCommand(parsed.command, parsed.arguments, history, historyCount) == 1)
         {
             break;
         }

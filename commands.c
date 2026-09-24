@@ -23,10 +23,13 @@ void printHelp()
 {
     message(GREEN, "Available commands :D\n");
     message(GRAY, "  home - Return to home screen\n");
-    message(GRAY, "  help - Show all available commands\n");
-    message(GRAY, "  clear - Clear the terminal\n");
-    message(GRAY, "  pwd - Show current directory\n");
-    message(GRAY, "  quit - Exit CPSH-C\n ");
+    message(WHITE, "  help - Show all available commands\n");
+    message(RED, "  clear - Clear the terminal\n");
+    message(CYAN, "  pwd - Show current directory\n");
+    message(YELLOW, "  cd - Change the current directory\n");
+    message(CYAN, "  ls - List files and folders\n");
+    message(CYAN, "  history - Show previous commands\n");
+    message(RED, "  quit - Exit CPSH-C\n ");
 }
 
 void home(void)
@@ -66,7 +69,42 @@ void printWorkingDirectory(void)
     }
 }
 
-int runCommand(char command[], char arguments[])
+void changeDirectory(char path[])
+{
+    if (SetCurrentDirectoryA(path))
+    {
+        message(GREEN, "Directory changed! :D\n");
+    }
+    else
+    {
+        message(RED, "Directory not found :(\n");
+    }
+}
+
+void listDirectory(void)
+{
+    WIN32_FIND_DATAA fileData;
+    HANDLE handle = FindFirstFileA("*", &fileData);
+
+    if (handle == INVALID_HANDLE_VALUE)
+    {
+        message(RED, "couldn't read directory :/ \n");
+        return;
+    }
+
+    do
+    {
+        printf("  %s\n", fileData.cFileName);
+    } while (FindNextFileA(handle, &fileData));
+
+    FindClose(handle);
+}
+
+int runCommand(
+    char command[],
+    char arguments[],
+    char history[][100],
+    int historyCount)
 {
     if (strcmp(command, "quit") == 0)
     {
@@ -98,9 +136,50 @@ int runCommand(char command[], char arguments[])
         return 0;
     }
 
+    else if (strcmp(command, "cd") == 0)
+    {
+        if (arguments[0] == '\0')
+        {
+            message(YELLOW, "Usage: cd <directory>\n");
+            return 0;
+        }
+
+        changeDirectory(arguments);
+        return 0;
+    }
+
+    else if (strcmp(command, "ls") == 0)
+    {
+        listDirectory();
+        return 0;
+    }
+
+    else if (strcmp(command, "history") == 0)
+    {
+        if (historyCount == 0)
+        {
+            message(YELLOW, "no commands in history yet\n");
+            return 0;
+        }
+
+        for (int i = 0; i < historyCount; i++)
+        {
+            printf("  %d. %s", i + 1, history[i]);
+        }
+
+        return 0;
+    }
+
     else if (strcmp(command, "echo") == 0)
     {
         char argsNew[1001];
+
+        if (arguments[0] == '\0')
+        {
+            message(YELLOW, "Usage: echo <text>\n");
+            return 0;
+        }
+
         snprintf(argsNew, sizeof(argsNew), "%s\n", arguments);
         message(GREEN, argsNew);
         return 0;

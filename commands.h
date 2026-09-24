@@ -12,6 +12,10 @@ void home();
 void printBanner(void);
 void setColor(int color);
 void message(int color, char message[]);
-int runCommand(char command[], char arguments[]);
+int runCommand(
+    char command[],
+    char arguments[],
+    char history[][100],
+    int historyCount);
 
 #endif
