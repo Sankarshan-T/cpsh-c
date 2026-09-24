@@ -16,7 +16,8 @@ int main(void)
 
     while (1)
     {
-        printf("cpsh-c$ ");
+        message(CYAN, "cpsh-c$ ");
+        setColor(YELLOW);
 
         fgets(input, sizeof(input), stdin);
 
