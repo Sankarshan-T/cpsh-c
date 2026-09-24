@@ -24,11 +24,13 @@ void printHelp()
     message(GREEN, "Available commands :D\n");
     message(GRAY, "  home - Return to home screen\n");
     message(WHITE, "  help - Show all available commands\n");
-    message(RED, "  clear - Clear the terminal\n");
+    message(WHITE, "  touch - Create a file\n");
+    message(CYAN, "  cat - Display a file\n");
     message(CYAN, "  pwd - Show current directory\n");
-    message(YELLOW, "  cd - Change the current directory\n");
+    message(CYAN, "  cd - Change the current directory\n");
     message(CYAN, "  ls - List files and folders\n");
     message(CYAN, "  history - Show previous commands\n");
+    message(RED, "  clear - Clear the terminal\n");
     message(RED, "  quit - Exit CPSH-C\n ");
 }
 
@@ -100,6 +102,40 @@ void listDirectory(void)
     FindClose(handle);
 }
 
+void createFile(char filename[])
+{
+    FILE *file = fopen(filename, "w");
+
+    if (file == NULL)
+    {
+        message(RED, "Couldnt create file\n");
+        return;
+    }
+
+    fclose(file);
+    message(GREEN, "File created! :)\n");
+}
+
+void readFile(char filename[])
+{
+    FILE *file = fopen(filename, "r");
+
+    if (file == NULL)
+    {
+        message(RED, "Couldn't open file!\n");
+        return;
+    }
+
+    char line[500];
+
+    while (fgets(line, sizeof(line), file) != NULL)
+    {
+        printf("%s\n", line);
+    }
+
+    fclose(file);
+}
+
 int runCommand(
     char command[],
     char arguments[],
@@ -154,6 +190,18 @@ int runCommand(
         return 0;
     }
 
+    else if (strcmp(command, "cat") == 0)
+    {
+        if (arguments[0] == '\0')
+        {
+            message(YELLOW, "Usage: cat <filename>\n");
+            return 0;
+        }
+
+        readFile(arguments);
+        return 0;
+    }
+
     else if (strcmp(command, "history") == 0)
     {
         if (historyCount == 0)
@@ -167,6 +215,18 @@ int runCommand(
             printf("  %d. %s", i + 1, history[i]);
         }
 
+        return 0;
+    }
+
+    else if (strcmp(command, "touch") == 0)
+    {
+        if (arguments[0] == '\0')
+        {
+            message(YELLOW, "Usage: touch <filename>\n");
+            return 0;
+        }
+
+        createFile(arguments);
         return 0;
     }
 
