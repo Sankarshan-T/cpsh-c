@@ -31,6 +31,21 @@ void message(int color, char message[])
     setColor(WHITE);
 }
 
+void printWorkingDirectory(void)
+{
+    char currentPath[MAX_PATH];
+
+    if (GetCurrentDirectoryA(MAX_PATH, currentPath))
+    {
+        message(CYAN, currentPath);
+        printf("\n");
+    }
+    else
+    {
+        message(RED, "Couldnt get your current working directory :C");
+    }
+}
+
 int runCommand(char command[], char arguments[])
 {
     if (strcmp(command, "quit") == 0)
@@ -50,8 +65,15 @@ int runCommand(char command[], char arguments[])
         message(GREEN, "Available commands\n");
         message(CYAN, "  help - Show available commands\n");
         message(CYAN, "  clear - Clear the terminal\n");
+        message(CYAN, "  pwd - Show current directory\n");
         message(CYAN, "  quit - quir CPSH-C\n ");
 
+        return 0;
+    }
+
+    else if (strcmp(command, "pwd") == 0)
+    {
+        printWorkingDirectory();
         return 0;
     }
 
