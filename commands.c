@@ -7,6 +7,7 @@
 
 void printBanner()
 {
+    setColor(CYAN);
     printf(
         "╔█████ ╔██████ ╔█████ ╔██ ╔██    ╔█████\n"
         "║██    ║██  ██ ║██    ║██ ║██    ║██\n"
@@ -15,6 +16,24 @@ void printBanner()
         "║█████ ║██     ╔█████ ║██ ║██    ║█████\n"
         "╚════╝ ╚═╝     ╚════╝ ╚═╝ ╚═╝    ╚════╝\n"
         "            C Command Line             \n");
+    setColor(WHITE);
+}
+
+void printHelp()
+{
+    message(GREEN, "Available commands :D\n");
+    message(GRAY, "  home - Return to home screen\n");
+    message(GRAY, "  help - Show all available commands\n");
+    message(GRAY, "  clear - Clear the terminal\n");
+    message(GRAY, "  pwd - Show current directory\n");
+    message(GRAY, "  quit - Exit CPSH-C\n ");
+}
+
+void home(void)
+{
+    system("cls");
+    printBanner();
+    printHelp();
 }
 
 void setColor(int color)
@@ -37,7 +56,8 @@ void printWorkingDirectory(void)
 
     if (GetCurrentDirectoryA(MAX_PATH, currentPath))
     {
-        message(CYAN, currentPath);
+        message(CYAN, "Current path: ");
+        message(GREEN, currentPath);
         printf("\n");
     }
     else
@@ -60,14 +80,15 @@ int runCommand(char command[], char arguments[])
         return 0;
     }
 
+    else if (strcmp(command, "home") == 0)
+    {
+        home();
+        return 0;
+    }
+
     else if (strcmp(command, "help") == 0)
     {
-        message(GREEN, "Available commands\n");
-        message(CYAN, "  help - Show available commands\n");
-        message(CYAN, "  clear - Clear the terminal\n");
-        message(CYAN, "  pwd - Show current directory\n");
-        message(CYAN, "  quit - quir CPSH-C\n ");
-
+        printHelp();
         return 0;
     }
 

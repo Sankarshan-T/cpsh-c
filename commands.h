@@ -8,7 +8,7 @@
 #define CYAN 11
 #define GRAY 8
 
-void welcome();
+void home();
 void printBanner(void);
 void setColor(int color);
 void message(int color, char message[]);
