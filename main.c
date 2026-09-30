@@ -22,6 +22,7 @@ int main(void)
     {
         if (GetCurrentDirectoryA(MAX_PATH, currentPath))
         {
+            message(GREEN, "[cpsh-c] ");
             message(WHITE, currentPath);
             message(WHITE, "> ");
         }

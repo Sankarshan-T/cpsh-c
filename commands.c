@@ -4,13 +4,7 @@
 #include <windows.h>
 
 #include "commands.h"
-
-#define WHITE 7
-#define GREEN 10
-#define YELLOW 14
-#define RED 12
-#define CYAN 11
-#define GRAY 8
+#include "command-table.h"
 
 void setColor(int color)
 {
@@ -77,8 +71,8 @@ void printBanner(void)
 
 void printHelp(void)
 {
-    message(GREEN, "Available commands :D\n");
-
+    message(GREEN, "C command line :D\n");
+    message(WHITE, "-----------------------------\n");
     message(GRAY, "  home - Return to home screen\n");
     message(WHITE, "  help - Show all available commands\n");
     message(CYAN, "  echo <text> - Print text\n");
@@ -91,6 +85,7 @@ void printHelp(void)
     message(RED, "  remove <filename> - Remove a file\n");
     message(RED, "  clear/cls - Clear the terminal\n");
     message(RED, "  quit/exit - Exit CPSH-C\n");
+    message(WHITE, "-----------------------------\n");
 }
 
 void home(void)
@@ -211,151 +206,26 @@ int runCommand(
     char history[][100],
     int historyCount)
 {
-    if (strcmp(command, "quit") == 0)
+    for (int i = 0; i < commandCount; i++)
     {
-        message(GREEN, "Quitting CPSH...\n");
-        return 1;
-    }
-
-    else if (strcmp(command, "exit") == 0)
-    {
-        message(GREEN, "Quitting CPSH...\n");
-        return 1;
-    }
-
-    else if (strcmp(command, "clear") == 0)
-    {
-        system("cls");
-        return 0;
-    }
-
-    else if (strcmp(command, "cls") == 0)
-    {
-        system("cls");
-        return 0;
-    }
-
-    else if (strcmp(command, "home") == 0)
-    {
-        home();
-        return 0;
-    }
-
-    else if (strcmp(command, "help") == 0)
-    {
-        printHelp();
-        return 0;
-    }
-
-    else if (strcmp(command, "pwd") == 0)
-    {
-        printWorkingDirectory();
-        return 0;
-    }
-
-    else if (strcmp(command, "cd") == 0)
-    {
-        if (arguments[0] == '\0')
+        if (strcmp(command, commands[i].name) == 0)
         {
-            error("warning", "Usage: cd <directory>\n");
-            return 0;
+            return commands[i].function(
+                arguments,
+                history,
+                historyCount);
         }
-
-        changeDirectory(arguments);
-        return 0;
     }
 
-    else if (strcmp(command, "ls") == 0)
-    {
-        listDirectory();
-        return 0;
-    }
+    char unknownCommand[1050];
 
-    else if (strcmp(command, "cat") == 0)
-    {
-        if (arguments[0] == '\0')
-        {
-            error("warning", "Usage: cat <filename>\n");
-            return 0;
-        }
+    snprintf(
+        unknownCommand,
+        sizeof(unknownCommand),
+        "Unknown command: %s\n",
+        command);
 
-        readFile(arguments);
-        return 0;
-    }
+    error("fatal", unknownCommand);
 
-    else if (strcmp(command, "history") == 0)
-    {
-        if (historyCount == 0)
-        {
-            error("warning", "No commands in history yet!\n");
-            return 0;
-        }
-
-        for (int i = 0; i < historyCount; i++)
-        {
-            printf("  %d. %s", i + 1, history[i]);
-        }
-
-        return 0;
-    }
-
-    else if (strcmp(command, "touch") == 0)
-    {
-        if (arguments[0] == '\0')
-        {
-            error("warning", "Usage: touch <filename>\n");
-            return 0;
-        }
-
-        createFile(arguments);
-        return 0;
-    }
-
-    else if (strcmp(command, "echo") == 0)
-    {
-        if (arguments[0] == '\0')
-        {
-            error("warning", "Usage: echo <text>\n");
-            return 0;
-        }
-
-        char argsNew[1001];
-
-        snprintf(
-            argsNew,
-            sizeof(argsNew),
-            "%s\n",
-            arguments);
-
-        message(GREEN, argsNew);
-
-        return 0;
-    }
-
-    else if (strcmp(command, "remove") == 0)
-    {
-        if (arguments[0] == '\0')
-        {
-            error("warning", "Usage: remove <filename>\n");
-            return 0;
-        }
-
-        removeFile(arguments);
-        return 0;
-    }
-
-    else
-    {
-        char unknownCommand[1050];
-
-        snprintf(
-            unknownCommand,
-            sizeof(unknownCommand),
-            "Unknown command: %s\n",
-            command);
-
-        error("fatal", unknownCommand);
-
-        return 0;
-    }
+    return 0;
 }
