@@ -143,6 +143,53 @@ int commandRemove(
     return 0;
 }
 
+int commandCalc(
+    char arguments[],
+    char history[][100],
+    int historyCount)
+{
+    double a, b;
+    char operator;
+
+    if (scanf(arguments, "%lf % c % lf", &a, &operator, &b) != 3)
+    {
+        error("warning", "Usage: calc <number> <operator> <number>\n");
+        return 0;
+    }
+
+    double result;
+
+    switch (operator)
+    {
+    case '+':
+        result = a + b;
+        break;
+    case '-':
+        result = a - b;
+        break;
+    case '*':
+        result = a * b;
+        break;
+    case '/':
+        if (b == 0)
+        {
+            error("fatal", "Cannot divide by zero!\n");
+            return 0;
+        }
+
+        result = a / b;
+        break;
+
+    default:
+        error("warning", "Unknown operator :C\n");
+        return 0;
+    }
+
+    printf("= %.2f\n", result);
+
+    return 0;
+}
+
 int commandHistory(
     char arguments[],
     char history[][100],
@@ -177,6 +224,7 @@ Command commands[] =
         {"touch", commandTouch},
         {"echo", commandEcho},
         {"remove", commandRemove},
+        {"calc", commandCalc},
         {"history", commandHistory}};
 
 int commandCount = sizeof(commands) / sizeof(commands[0]);

@@ -82,6 +82,7 @@ void printHelp(void)
     message(CYAN, "  cd <directory> - Change the current directory\n");
     message(CYAN, "  ls - List files and folders\n");
     message(CYAN, "  history - Show previous commands\n");
+    message(CYAN, "  calc <a> <operator> <b> - Calculate\n");
     message(RED, "  remove <filename> - Remove a file\n");
     message(RED, "  clear/cls - Clear the terminal\n");
     message(RED, "  quit/exit - Exit CPSH-C\n");
