@@ -37,3 +37,7 @@ git clone https://github.com/Sankarshan-T/cpsh-c
 3. Then run it with `my-cpsh-c.exe` (for command prompt) or `./my-cpsh-c.exe` (for powershell)
 
 ## Made completely using C
+
+## Gallery
+![alt text](assets/image.png)
+![alt text](assets/image2.png)
