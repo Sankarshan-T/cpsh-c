@@ -31,8 +31,8 @@ void printHelp()
     message(CYAN, "  ls - List files and folders\n");
     message(CYAN, "  history - Show previous commands\n");
     message(RED, "  remove <filename> - Remove a file\n");
-    message(RED, "  clear - Clear the terminal\n");
-    message(RED, "  quit - Exit CPSH-C\n ");
+    message(RED, "  clear/cls - Clear the terminal\n");
+    message(RED, "  quit/exit - Exit CPSH-C\n ");
 }
 
 void home(void)
@@ -162,8 +162,18 @@ int runCommand(
         message(GREEN, "Quitting CPSH...\n");
         return 1;
     }
+    if (strcmp(command, "exit") == 0)
+    {
+        message(GREEN, "Quitting CPSH...\n");
+        return 1;
+    }
 
     else if (strcmp(command, "clear") == 0)
+    {
+        system("cls");
+        return 0;
+    }
+    else if (strcmp(command, "cls") == 0)
     {
         system("cls");
         return 0;

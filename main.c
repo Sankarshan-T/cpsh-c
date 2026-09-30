@@ -14,11 +14,21 @@ int main(void)
     char history[100][100];
     int historyCount = 0;
 
+    char currentPath[MAX_PATH];
+
     home();
 
     while (1)
     {
-        message(WHITE, "cpsh-c$ ");
+        if (GetCurrentDirectoryA(MAX_PATH, currentPath))
+        {
+            message(WHITE, currentPath);
+            message(WHITE, "> ");
+        }
+        else
+        {
+            message(WHITE, "cpsh-c$ ");
+        }
         setColor(YELLOW);
 
         fgets(input, sizeof(input), stdin);
