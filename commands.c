@@ -5,42 +5,12 @@
 
 #include "commands.h"
 
-void printBanner()
-{
-    setColor(CYAN);
-    printf(
-        "╔█████ ╔██████ ╔█████ ╔██ ╔██    ╔█████\n"
-        "║██    ║██  ██ ║██    ║██ ║██    ║██\n"
-        "║██    ║██████ ║█████ ║██████┌███║██\n"
-        "║██    ║██     ╚═══██ ║██═╗██└──┘║██\n"
-        "║█████ ║██     ╔█████ ║██ ║██    ║█████\n"
-        "╚════╝ ╚═╝     ╚════╝ ╚═╝ ╚═╝    ╚════╝\n"
-        "            C Command Line             \n");
-    setColor(WHITE);
-}
-
-void printHelp()
-{
-    message(GREEN, "Available commands :D\n");
-    message(GRAY, "  home - Return to home screen\n");
-    message(WHITE, "  help - Show all available commands\n");
-    message(WHITE, "  touch <filename> - Create a file\n");
-    message(CYAN, "  cat <filename> - Display a file\n");
-    message(CYAN, "  pwd - Show current directory\n");
-    message(CYAN, "  cd - Change the current directory\n");
-    message(CYAN, "  ls - List files and folders\n");
-    message(CYAN, "  history - Show previous commands\n");
-    message(RED, "  remove <filename> - Remove a file\n");
-    message(RED, "  clear/cls - Clear the terminal\n");
-    message(RED, "  quit/exit - Exit CPSH-C\n ");
-}
-
-void home(void)
-{
-    system("cls");
-    printBanner();
-    printHelp();
-}
+#define WHITE 7
+#define GREEN 10
+#define YELLOW 14
+#define RED 12
+#define CYAN 11
+#define GRAY 8
 
 void setColor(int color)
 {
@@ -56,6 +26,80 @@ void message(int color, char message[])
     setColor(WHITE);
 }
 
+void error(char type[], char text[])
+{
+    int color;
+    char label[20];
+
+    if (strcmp(type, "warning") == 0)
+    {
+        color = YELLOW;
+        strcpy(label, "WARNING !!");
+    }
+    else if (strcmp(type, "fatal") == 0)
+    {
+        color = RED;
+        strcpy(label, "ERROR :(");
+    }
+    else
+    {
+        color = WHITE;
+        strcpy(label, "MESSAGE");
+    }
+
+    char output[1100];
+
+    snprintf(
+        output,
+        sizeof(output),
+        "[%s] %s",
+        label,
+        text);
+
+    message(color, output);
+}
+
+void printBanner(void)
+{
+    setColor(CYAN);
+
+    printf(
+        "╔█████ ╔██████ ╔█████ ╔██ ╔██    ╔█████\n"
+        "║██    ║██  ██ ║██    ║██ ║██    ║██\n"
+        "║██    ║██████ ║█████ ║██████┌███║██\n"
+        "║██    ║██     ╚═══██ ║██═╗██└──┘║██\n"
+        "║█████ ║██     ╔█████ ║██ ║██    ║█████\n"
+        "╚════╝ ╚═╝     ╚════╝ ╚═╝ ╚═╝    ╚════╝\n"
+        "            C Command Line             \n");
+
+    setColor(WHITE);
+}
+
+void printHelp(void)
+{
+    message(GREEN, "Available commands :D\n");
+
+    message(GRAY, "  home - Return to home screen\n");
+    message(WHITE, "  help - Show all available commands\n");
+    message(CYAN, "  echo <text> - Print text\n");
+    message(CYAN, "  touch <filename> - Create a file\n");
+    message(CYAN, "  cat <filename> - Display a file\n");
+    message(CYAN, "  pwd - Show current directory\n");
+    message(CYAN, "  cd <directory> - Change the current directory\n");
+    message(CYAN, "  ls - List files and folders\n");
+    message(CYAN, "  history - Show previous commands\n");
+    message(RED, "  remove <filename> - Remove a file\n");
+    message(RED, "  clear/cls - Clear the terminal\n");
+    message(RED, "  quit/exit - Exit CPSH-C\n");
+}
+
+void home(void)
+{
+    system("cls");
+    printBanner();
+    printHelp();
+}
+
 void printWorkingDirectory(void)
 {
     char currentPath[MAX_PATH];
@@ -68,7 +112,7 @@ void printWorkingDirectory(void)
     }
     else
     {
-        message(RED, "Couldnt get your current working directory :C");
+        error("fatal", "Couldn't get your current working directory!\n");
     }
 }
 
@@ -80,24 +124,35 @@ void changeDirectory(char path[])
     }
     else
     {
-        message(RED, "Directory not found :(\n");
+        error("fatal", "Directory not found!\n");
     }
 }
 
 void listDirectory(void)
 {
     WIN32_FIND_DATAA fileData;
+
     HANDLE handle = FindFirstFileA("*", &fileData);
 
     if (handle == INVALID_HANDLE_VALUE)
     {
-        message(RED, "couldn't read directory :/ \n");
+        error("fatal", "Couldn't read directory :/\n");
         return;
     }
 
     do
     {
-        printf("  %s\n", fileData.cFileName);
+        if (fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+        {
+            message(CYAN, "  [DIR]  ");
+            printf("%s\n", fileData.cFileName);
+        }
+        else
+        {
+            message(WHITE, "  [FILE] ");
+            printf("%s\n", fileData.cFileName);
+        }
+
     } while (FindNextFileA(handle, &fileData));
 
     FindClose(handle);
@@ -109,11 +164,12 @@ void createFile(char filename[])
 
     if (file == NULL)
     {
-        message(RED, "Couldnt create file\n");
+        error("fatal", "Couldn't create file!\n");
         return;
     }
 
     fclose(file);
+
     message(GREEN, "File created! :)\n");
 }
 
@@ -123,7 +179,7 @@ void readFile(char filename[])
 
     if (file == NULL)
     {
-        message(RED, "Couldn't open file!\n");
+        error("fatal", "Couldn't open file!\n");
         return;
     }
 
@@ -131,9 +187,7 @@ void readFile(char filename[])
 
     while (fgets(line, sizeof(line), file) != NULL)
     {
-        setColor(GREEN);
-        printf("%s\n", line);
-        setColor(WHITE);
+        message(GREEN, line);
     }
 
     fclose(file);
@@ -147,7 +201,7 @@ void removeFile(char filename[])
     }
     else
     {
-        message(RED, "Couldn't remove file!\n");
+        error("fatal", "Couldn't remove file!\n");
     }
 }
 
@@ -162,7 +216,8 @@ int runCommand(
         message(GREEN, "Quitting CPSH...\n");
         return 1;
     }
-    if (strcmp(command, "exit") == 0)
+
+    else if (strcmp(command, "exit") == 0)
     {
         message(GREEN, "Quitting CPSH...\n");
         return 1;
@@ -173,6 +228,7 @@ int runCommand(
         system("cls");
         return 0;
     }
+
     else if (strcmp(command, "cls") == 0)
     {
         system("cls");
@@ -201,7 +257,7 @@ int runCommand(
     {
         if (arguments[0] == '\0')
         {
-            message(YELLOW, "Usage: cd <directory>\n");
+            error("warning", "Usage: cd <directory>\n");
             return 0;
         }
 
@@ -219,7 +275,7 @@ int runCommand(
     {
         if (arguments[0] == '\0')
         {
-            message(YELLOW, "Usage: cat <filename>\n");
+            error("warning", "Usage: cat <filename>\n");
             return 0;
         }
 
@@ -231,7 +287,7 @@ int runCommand(
     {
         if (historyCount == 0)
         {
-            message(YELLOW, "no commands in history yet\n");
+            error("warning", "No commands in history yet!\n");
             return 0;
         }
 
@@ -247,7 +303,7 @@ int runCommand(
     {
         if (arguments[0] == '\0')
         {
-            message(YELLOW, "Usage: touch <filename>\n");
+            error("warning", "Usage: touch <filename>\n");
             return 0;
         }
 
@@ -257,16 +313,22 @@ int runCommand(
 
     else if (strcmp(command, "echo") == 0)
     {
-        char argsNew[1001];
-
         if (arguments[0] == '\0')
         {
-            message(YELLOW, "Usage: echo <text>\n");
+            error("warning", "Usage: echo <text>\n");
             return 0;
         }
 
-        snprintf(argsNew, sizeof(argsNew), "%s\n", arguments);
+        char argsNew[1001];
+
+        snprintf(
+            argsNew,
+            sizeof(argsNew),
+            "%s\n",
+            arguments);
+
         message(GREEN, argsNew);
+
         return 0;
     }
 
@@ -274,7 +336,7 @@ int runCommand(
     {
         if (arguments[0] == '\0')
         {
-            message(YELLOW, "Usage: remove <filename>\n");
+            error("warning", "Usage: remove <filename>\n");
             return 0;
         }
 
@@ -285,8 +347,15 @@ int runCommand(
     else
     {
         char unknownCommand[1050];
-        snprintf(unknownCommand, sizeof(unknownCommand), "Unknown command: %s\n", command);
-        message(RED, unknownCommand);
+
+        snprintf(
+            unknownCommand,
+            sizeof(unknownCommand),
+            "Unknown command: %s\n",
+            command);
+
+        error("fatal", unknownCommand);
+
         return 0;
     }
 }
