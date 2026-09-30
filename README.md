@@ -1,9 +1,4 @@
-╔█████ ╔██████ ╔█████ ╔██ ╔██    ╔█████<br/>
-║██    ║██  ██ ║██    ║██ ║██    ║██<br/>
-║██    ║██████ ║█████ ║██████┌███║██<br/>
-║██    ║██     ╚═══██ ║██═╗██└──┘║██<br/>
-║█████ ║██     ╔█████ ║██ ║██    ║█████<br/>
-╚════╝ ╚═╝     ╚════╝ ╚═╝ ╚═╝    ╚════╝<br/>
+![alt text](assets/cpshc.svg)
 
 C Command Line
 An awesome command line written in C for windows, a version of [cpsh](https://github.com/Sankarshan-T/cpsh) (which was written in C++), now cloned into C!!!
