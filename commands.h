@@ -22,6 +22,8 @@ void listDirectory(void);
 void createFile(char filename[]);
 void readFile(char filename[]);
 void removeFile(char filename[]);
+void makeDirectory(char name[]);
+void about();
 
 int runCommand(
     char command[],

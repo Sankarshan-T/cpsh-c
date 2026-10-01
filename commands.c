@@ -75,6 +75,7 @@ void printHelp(void)
     message(WHITE, "-----------------------------\n");
     message(GRAY, "  home - Return to home screen\n");
     message(WHITE, "  help - Show all available commands\n");
+    message(WHITE, "  about - about the shell\n");
     message(CYAN, "  echo <text> - Print text\n");
     message(CYAN, "  touch <filename> - Create a file\n");
     message(CYAN, "  cat <filename> - Display a file\n");
@@ -83,6 +84,7 @@ void printHelp(void)
     message(CYAN, "  ls - List files and folders\n");
     message(CYAN, "  history - Show previous commands\n");
     message(CYAN, "  calc <a> <operator> <b> - Calculate\n");
+    message(CYAN, "  mkdir <directory> - Create a directory\n");
     message(RED, "  remove <filename> - Remove a file\n");
     message(RED, "  clear/cls - Clear the terminal\n");
     message(RED, "  quit/exit - Exit CPSH-C\n");
@@ -199,6 +201,27 @@ void removeFile(char filename[])
     {
         error("fatal", "Couldn't remove file!\n");
     }
+}
+
+void makeDirectory(char name[])
+{
+    if (CreateDirectoryA(name, NULL))
+    {
+        message(GREEN, "created directory :D");
+    }
+    else
+    {
+        error("fatal", "couldnt create directory :C");
+    }
+}
+
+void about()
+{
+    message(GREEN, "CPSH-C\n");
+    message(CYAN, "Creator: coolcream\n");
+    message(CYAN, "Version: 1.0.0\n");
+    message(YELLOW, "OS: windows (obviously)\n");
+    message(YELLOW, "Compiler: gcc\n");
 }
 
 int runCommand(

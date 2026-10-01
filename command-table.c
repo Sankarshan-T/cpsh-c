@@ -190,6 +190,29 @@ int commandCalc(
     return 0;
 }
 
+int commandAbout(
+    char arguments[],
+    char history[][100],
+    int historyCount)
+{
+    about();
+    return 0;
+}
+
+int commandMkdir(
+    char arguments[],
+    char history[][100],
+    int historycCount)
+{
+    if (arguments[0] = '\0')
+    {
+        error("warning", "usage: mkdir <name>\n");
+        return 0;
+    }
+    makeDirectory(arguments);
+    return 0;
+}
+
 int commandHistory(
     char arguments[],
     char history[][100],
@@ -225,6 +248,8 @@ Command commands[] =
         {"echo", commandEcho},
         {"remove", commandRemove},
         {"calc", commandCalc},
+        {"mkddir", commandMkdir},
+        {"about", commandAbout},
         {"history", commandHistory}};
 
 int commandCount = sizeof(commands) / sizeof(commands[0]);
