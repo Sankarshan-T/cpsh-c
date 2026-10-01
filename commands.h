@@ -23,6 +23,7 @@ void createFile(char filename[]);
 void readFile(char filename[]);
 void removeFile(char filename[]);
 void makeDirectory(char name[]);
+void removeDirectory(char dirName[]);
 void about();
 
 int runCommand(

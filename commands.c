@@ -203,15 +203,37 @@ void removeFile(char filename[])
     }
 }
 
+void removeDirectory(char dirName[])
+{
+    if (RemoveDirectoryA(dirName))
+    {
+        message(GREEN, "directory removed!\n");
+    }
+    else
+    {
+        error("fatal", "Couldn't remove directory :/ \n");
+    }
+}
+
 void makeDirectory(char name[])
 {
     if (CreateDirectoryA(name, NULL))
     {
-        message(GREEN, "created directory :D");
+        message(GREEN, "Directory created! :D\n");
     }
     else
     {
-        error("fatal", "couldnt create directory :C");
+        DWORD errorCode = GetLastError();
+
+        char output[200];
+
+        snprintf(
+            output,
+            sizeof(output),
+            "couldnt create directory :C (Error code: %lu)\n",
+            errorCode);
+
+        error("fatal", output);
     }
 }
 

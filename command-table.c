@@ -204,12 +204,26 @@ int commandMkdir(
     char history[][100],
     int historycCount)
 {
-    if (arguments[0] = '\0')
+    if (arguments[0] == '\0')
     {
         error("warning", "usage: mkdir <name>\n");
         return 0;
     }
     makeDirectory(arguments);
+    return 0;
+}
+
+int commandRmdir(
+    char arguments[],
+    char history[][100],
+    int historycCount)
+{
+    if (arguments[0] == '\0')
+    {
+        error("warning", "usage: rmdir <name>\n");
+        return 0;
+    }
+    removeDirectory(arguments);
     return 0;
 }
 
@@ -248,7 +262,8 @@ Command commands[] =
         {"echo", commandEcho},
         {"remove", commandRemove},
         {"calc", commandCalc},
-        {"mkddir", commandMkdir},
+        {"mkdir", commandMkdir},
+        {"rmdir", commandRmdir},
         {"about", commandAbout},
         {"history", commandHistory}};
 
