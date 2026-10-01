@@ -241,7 +241,7 @@ void about()
 {
     message(GREEN, "CPSH-C\n");
     message(CYAN, "Creator: coolcream\n");
-    message(CYAN, "Version: 1.0.0\n");
+    message(CYAN, "Version: 2.0.0\n");
     message(YELLOW, "OS: windows (obviously)\n");
     message(YELLOW, "Compiler: gcc\n");
 }
