@@ -151,7 +151,7 @@ int commandCalc(
     double a, b;
     char operator;
 
-    if (scanf(arguments, "%lf % c % lf", &a, &operator, &b) != 3)
+    if (sscanf(arguments, "%lf %c %lf", &a, &operator, &b) != 3)
     {
         error("warning", "Usage: calc <number> <operator> <number>\n");
         return 0;
