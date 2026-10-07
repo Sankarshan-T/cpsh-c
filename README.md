@@ -28,7 +28,7 @@ An awesome command line written in C for windows, a version of [cpsh](https://gi
 1. Clone this repository:
 git clone https://github.com/Sankarshan-T/cpsh-c
 2. Compile all files using:
-`gcc main.c parser.c commands.c -o my-cpsh-c.exe -static`
+`gcc main.c parser.c commands.c command-table.c -o my-cpsh-c.exe -static`
 3. Then run it with `my-cpsh-c.exe` (for command prompt) or `./my-cpsh-c.exe` (for powershell)
 
 ## Made completely using C
